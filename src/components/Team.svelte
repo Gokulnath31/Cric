@@ -1,6 +1,7 @@
 <script>
     import {homeTeam,awayTeam} from "../stores/teamStore.js"
     import AddPlayers from "./AddPlayers.svelte"
+    
     export let nxtComponent;
     // let homeTeam = {name:"",team:[],tossWon:false}
     // let awayTeam = {name:"",team:[],tossWon:false}
