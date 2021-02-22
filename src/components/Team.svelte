@@ -7,6 +7,7 @@
     // let awayTeam = {name:"",team:[],tossWon:false}
     let toss = ""; 
     let choseTo;
+    $:choseTo=toss.choseTo;
     function startMatch(){
         if ($homeTeam.team.length<11 || $awayTeam.team.length<11){
             alert("Not enought members to play! Each teammust have exactly 11 members")
