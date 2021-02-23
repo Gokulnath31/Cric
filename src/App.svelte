@@ -1,5 +1,6 @@
 <script>
 	import Team from "./components/Team.svelte"
+	import Match from "./components/Match.svelte"
 	let currentComponent = Team
 	$:console.log(currentComponent)
 </script>
