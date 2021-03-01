@@ -7,11 +7,13 @@
     export let yetTobat;
     export let bowlers;
     export let handleWicket;
+    export let wickets;
 
     let wicket;
     let newBatsman;
     let type;
     let fielder;
+    let batsmanWhoGotOut;
 
     function updateBowler(type){
         if(type=="catch" || type=="hitout"){
@@ -21,12 +23,13 @@
     }
     function updateBatsman(wicket,newBatsman){
         if (wicket=="s"){
-            // store = [...store,striker]
+            batsmanWhoGotOut = striker
             striker.yetToBat = false
             striker = newBatsman
         }
         else if (wicket=="ns"){
-            // store = [...store,nonStriker]
+
+            batsmanWhoGotOut = nonStriker
             nonStriker.yetToBat = false
             nonStriker = newBatsman
         }
@@ -35,9 +38,13 @@
         updateBatsman(wicket,newBatsman);
     }
     $:updateBowler(type);
+    function addWicket(){
+        handleWicket=false
+        wickets.push({out:batsmanWhoGotOut,"type":type,"fielder":fielder})
+    }
 </script>
 
-<form on:submit|preventDefault="{() => handleWicket=false}">
+<form on:submit|preventDefault="{addWicket}">
     {#if !wicket}
         <div>
             Batsman who got out :

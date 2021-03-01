@@ -15,13 +15,6 @@
     
     setContext('nthInnings', nthInnings);
     setContext('target', target);
-    // $:console.log("target Inside Innings",target)
-    let inningsData = {
-        runsPerBall:[],
-        batsmen: [],
-        bowlers: [],
-        wickets: []
-    }
 
     let startOfInnings = true;
 
@@ -36,11 +29,11 @@
     innings.wicketsDown = 0;
     innings.oversCompleted = 0;
     innings.runsPerBall = []
+    innings.wickets = []
 
-    // $: console.log(striker,nonStriker,currentBowler)
+    
     $: yetTobat = innings.batsmen.filter(player => player.yetToBat)
-    // $:console.log(yetTobat)
-    // $:console.log(inningsData)
+    
     function updateInningsData(){
         if(nthInnings=="First"){
             dispatch('firstInningsEnd',innings.totalScore);   
@@ -48,8 +41,11 @@
     }
 
     function displayCommentary(event){
-        // console.log(event.detail.batsman,event.detail.bowler,event.detail.oversCompleted,event.detail.ball)
         commentary=[{id:commentary.length,...event.detail},...commentary]
+    }
+    function removeCommentary(event){
+        commentary=commentary.slice(1);
+        console.log(commentary)
     }
 </script>
 <style>
@@ -88,7 +84,7 @@
                 <p>Non Striker's end {`${nonStriker.playername} ${nonStriker.runsScored} ${nonStriker.ballsUsed}`}</p>
                 <p>Current Bowler    {currentBowler.playername}</p>
             </div>
-            <Overs bind:striker bind:nonStriker bind:currentBowler bind:yetTobat totalOvers={overs}  bind:innings={innings} on:inningsEnd={() => updateInningsData()} on:result on:ballBowled={displayCommentary}/>
+            <Overs bind:striker bind:nonStriker bind:currentBowler bind:yetTobat totalOvers={overs}  bind:innings={innings} on:inningsEnd={() => updateInningsData()} on:result on:ballBowled={displayCommentary} on:undoLastBall={removeCommentary}/>
 
             <!-- {#if (nthInnings=="Second")}
                 
@@ -98,7 +94,7 @@
     </div>
     <div>
 
-            {#each commentary as ball (ball.id)}
+            {#each commentary as ball (ball)}
                 <p> {ball.overs} {ball.bowler} to {ball.batsman} {ball.ball} {ball.ball}</p>
                 
             {/each} 

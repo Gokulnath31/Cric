@@ -132,7 +132,7 @@
             updateBatsmanRuns(striker,runs);
             striker.ballsUsed+=1
             balls+=1
-            ballData = `${runs}`
+            ballData = `${runs}R`
        } 
        if(!noball && wicket){
             innings.wicketsDown +=1;
@@ -148,12 +148,46 @@
     }
     $:hasInningsEnded(balls,innings.wicketsDown,innings.totalScore)
     // $:console.log(innings)
+
+    function undoLastDelivery(){
+        let lastBall = innings.runsPerBall.pop()
+        let runsOnLastBall = parseInt(lastBall[0])
+        let happened = lastBall.slice(1)
+        dispatch('undoLastBall',"By Mistake");
+        if(runsOnLastBall%2==1){
+            changeStrike()
+        }
+        if (happened=="NB"){
+            striker.runsScored -= runsOnLastBall
+            innings.totalScore -= runsOnLastBall
+            currentBowler.runsgiven -= runsOnLastBall
+
+        }
+        else if(happened=="Wd"){
+            striker.runsScored -= runsOnLastBall
+            innings.totalScore -= runsOnLastBall +1
+            currentBowler.runsgiven -= runsOnLastBall + 1
+        }
+        else if(happened=="b"){
+            currentBowler.runsgiven -= runsOnLastBall
+            innings.totalScore -= runsOnLastBall
+            striker.ballsUsed-=1
+            balls-=1
+        }
+        else if(happened=="R"){
+            currentBowler.runsgiven -= runsOnLastBall
+            innings.totalScore -= runsOnLastBall
+            striker.runsScored -= runsOnLastBall
+            striker.ballsUsed-=1
+            balls-=1
+        }
+    }
 </script>
 <p>{oversCompleted}</p>
 
 {#if (!hasEnded && handleWicket)}
     {console.log("CAlling Wicket")}
-    <Wicket bind:currentBowler bind:striker bind:nonStriker bind:yetTobat bind:bowlers={innings.bowlers} bind:handleWicket/>
+    <Wicket bind:currentBowler bind:striker bind:nonStriker bind:yetTobat bind:bowlers={innings.bowlers} bind:handleWicket bind:wickets={innings.wickets}/>
 {/if}
 
 {#if (!hasEnded && endOfOver)}
@@ -189,6 +223,7 @@
     <button on:click={() => processRuns(5)}>5</button>
     <button on:click={() => processRuns(6)}>6</button>
 
+    <button on:click={undoLastDelivery}>Undo last Ball</button>
     <button on:click={() => processRuns(6)}>Replace Batsman</button>
     <button on:click={() => processRuns(6)}>Replace Bowler</button>
 {/if}
