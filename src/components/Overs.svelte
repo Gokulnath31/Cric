@@ -1,4 +1,6 @@
 <script>
+    import {FIRST_INNINGS,SECOND_INNINGS,BOWLER,STRIKER,NONSTRIKER} from "../constants.js"
+
     import GetPlayer from "./GetPlayer.svelte"
     import Wicket from "./Wicket.svelte"
 
@@ -54,10 +56,10 @@
         if(innings.wicketsDown==10 || (balls/6)===totalOvers){
             hasEnded = true;
         }
-        if (hasEnded && nthInnings=="First"){
+        if (hasEnded && nthInnings==FIRST_INNINGS){
                 dispatch('inningsEnd','Innings has Ended');
         }
-        else if(nthInnings=="Second"){
+        else if(nthInnings==SECOND_INNINGS){
             findResult(score);
         }
     }
@@ -141,7 +143,11 @@
        }
        innings.runsPerBall=[...innings.runsPerBall,ballData]
        
-       dispatch('ballBowled',{batsman:striker.playername,bowler:currentBowler.playername,ball:ballData,overs:innings.oversCompleted});
+       dispatch('ballBowled',{batsman:striker.playername,
+                                bowler:currentBowler.playername,
+                                ball:ballData,
+                                overs:innings.oversCompleted
+                            });
        checkStriker(runs);
        updateOver(balls,extra);
     }
@@ -184,12 +190,12 @@
             innings.wicketsDown -=1
             let previousWicket = innings.wickets.pop()
             // console.log(previousWicket.out)
-            if(previousWicket.at=="s"){
+            if(previousWicket.at==STRIKER){
                 console.log("Undoing wicket at striker's end")
                 striker = previousWicket.out
                 striker.yetToBat = true
             }
-            else if(previousWicket.at=="ns"){
+            else if(previousWicket.at==NONSTRIKER){
                 console.log("Undoing wicket at non-striker's end")
                 nonStriker = previousWicket.out
                 nonStriker.yetToBat = true
@@ -207,11 +213,22 @@
 
 {#if (!hasEnded && handleWicket)}
     {console.log("CAlling Wicket")}
-    <Wicket bind:currentBowler bind:striker bind:nonStriker bind:yetTobat bind:bowlers={innings.bowlers} bind:handleWicket bind:wickets={innings.wickets}/>
+    <Wicket bind:currentBowler 
+            bind:striker 
+            bind:nonStriker 
+            bind:yetTobat 
+            bind:bowlers={innings.bowlers} 
+            bind:handleWicket 
+            bind:wickets={innings.wickets}
+    />
 {/if}
 
 {#if (!hasEnded && endOfOver)}
-    Choose Bowler<GetPlayer bind:squad={innings.bowlers} bind:chosenPlayer={currentBowler} type="bowler" on:change={() => endOfOver=false}/>
+    Choose Bowler<GetPlayer bind:squad={innings.bowlers} 
+                            bind:chosenPlayer={currentBowler} 
+                            type={BOWLER}
+                            on:change={() => endOfOver=false}
+                />
 {/if}
 {#if (!hasEnded && !handleWicket && !endOfOver)}
     <label>

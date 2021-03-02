@@ -1,4 +1,5 @@
 <script>
+    import {BATSMAN,BOWLER} from "../constants.js"
     import GetPlayer from "./GetPlayer.svelte"
 
     export let currentBowler;
@@ -79,14 +80,14 @@
 
     {#if type=="catch" || type=="runout"}
         <label>
-            Fielder <GetPlayer bind:squad={bowlers} bind:chosenPlayer={fielder} type="bowler"/>
+            Fielder <GetPlayer bind:squad={bowlers} bind:chosenPlayer={fielder} type={BOWLER}/>
         </label>
         
     {/if}
     
     {#if wicket}
         New Batsman 
-        <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={newBatsman} type="batsman"/>
+        <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={newBatsman} type={BATSMAN}/>
     {/if}
     <button type="Submit"> Resume Play</button>
 </form>

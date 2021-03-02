@@ -1,9 +1,11 @@
 <script>
+    import {FIRST_INNINGS,SECOND_INNINGS,BATTING,BOWLING} from "../constants.js"
+
     import {getDB,updateExistingMatch} from "../MatchesDB.js"
 
     import {matches} from "../stores/Matches.js"
     
-    import Home from "./Home.svelte"
+    import Home from "../components/Home.svelte"
     import ScoreCard from "./ScoreCard.svelte"
     import Innings from "./Innings.svelte"
 
@@ -43,10 +45,10 @@
     async function showResult(event){
         console.log("Calculating REsult....inside Match Component")
         if(event.detail==0){
-            $matches[matchId].result= getTeam("bowl").name
+            $matches[matchId].result= getTeam(BOWLING).name
         }
         else if(event.detail==1){
-            $matches[matchId].result= getTeam("bat").name
+            $matches[matchId].result= getTeam(BATTING).name
         }
         else{
             $matches[matchId].result = event.detail
@@ -79,19 +81,20 @@
 {/if}
 <main class="{showScorecard?'hide' : ''}">
     <Innings 
-        battingTeam={getTeam("bat")} 
-        bowlingTeam={getTeam("bowl")} 
+        battingTeam={getTeam(BATTING)} 
+        bowlingTeam={getTeam(BOWLING)} 
         bind:innings={$matches[matchId].Innings.First} 
-        nthInnings="First" 
+        nthInnings={FIRST_INNINGS} 
         on:firstInningsEnd={setTarget}
         on:updateDB={updateDatabase}
     />
     {#if (startSecondInnings)}
         <Innings    
-            battingTeam={getTeam("bowl")} 
-            bowlingTeam={getTeam("bat")} 
+            battingTeam={getTeam(BOWLING)} 
+            bowlingTeam={getTeam(BATTING)} 
             bind:innings={$matches[matchId].Innings.Second} 
-            nthInnings="Second" bind:target={$matches[matchId].target} 
+            nthInnings={SECOND_INNINGS} 
+            bind:target={$matches[matchId].target} 
             on:result={showResult}
             on:updateDB={updateDatabase}
         />

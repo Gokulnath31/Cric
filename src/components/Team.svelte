@@ -1,8 +1,10 @@
 <script>
+    import {BATTING,BOWLING} from "../constants.js"
+
     import {matches} from "../stores/Matches.js"
-    import AddPlayers from "./AddPlayers.svelte"
-    import Match from "./Match.svelte"
-    // let choice = ["bat","bowl"]
+    import AddPlayers from "../components/AddPlayers.svelte"
+    import Match from "../components/Match.svelte"
+    
     export let nxtComponent;
     export let matchId;
 
@@ -70,11 +72,11 @@
 {#if toss}
     <p>{toss} won the toss and Elected to</p>
     <label>
-        <input type=radio bind:group={choseTo} value="bat"/>
+        <input type=radio bind:group={choseTo} value={BATTING}/>
         Bat
     </label>
     <label>
-        <input type=radio bind:group={choseTo} value="bowl"/>
+        <input type=radio bind:group={choseTo} value={BOWLING}/>
         Bowl
     </label>
 {/if}

@@ -1,14 +1,20 @@
 <script>
 	import Home from "./components/Home.svelte"
 	// import Team from "./components/Team.svelte"
+	// import { Router } from "@roxi/routify";
+	// import { routes } from "../.routify/routes";
 
 	let matchId;
 	let currentComponent = Home
+
 	$:console.log(currentComponent)
 </script>
 
 <main>
 	<svelte:component this={currentComponent} bind:nxtComponent={currentComponent} bind:matchId/>
+	<!-- src/App.svelte -->
+  
+	<!-- <Router {routes} /> -->
 </main>
 
 <style>

@@ -40,7 +40,7 @@ export async function addNewMatch(db,match){
 }
 
 export async function updateExistingMatch(db,match){
-    console.log("Adding Match")
+    console.log("Updating Match")
 
     let tx = db.transaction('matches', 'readwrite');
     let matches = tx.objectStore('matches');

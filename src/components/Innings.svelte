@@ -1,4 +1,6 @@
 <script>
+    import {FIRST_INNINGS,BATSMAN,BOWLER} from "../constants.js"
+    
     import GetPlayer from "./GetPlayer.svelte"
     import Overs from "./Overs.svelte"
 
@@ -29,7 +31,7 @@
     $: yetTobat = innings.batsmen.filter(player => player.yetToBat)
     
     function updateInningsData(){
-        if(nthInnings=="First"){
+        if(nthInnings==FIRST_INNINGS){
             dispatch('firstInningsEnd',innings.totalScore);   
         }
     }
@@ -58,13 +60,13 @@
                 Opening batsmen
 
                 Batsman at Striker's End 
-                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={striker} type="batsman"/>
+                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={striker} type={BATSMAN}/>
                 
                 Batsman at Non-Striker's End 
-                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type="batsman"/>
+                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type={BATSMAN}/>
                     
                 Opening bowler
-                <GetPlayer bind:squad={innings.bowlers} bind:chosenPlayer={currentBowler} type="bowler"/>
+                <GetPlayer bind:squad={innings.bowlers} bind:chosenPlayer={currentBowler} type={BOWLER}/>
                 
                 <button type="submit">Start Innings</button>
             </form>
