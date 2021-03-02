@@ -1,26 +1,27 @@
 <script>
-    import {match} from "../stores/matchStore.js"
+    import {matches} from "../stores/Matches.js"
     import AddPlayers from "./AddPlayers.svelte"
     import Match from "./Match.svelte"
     // let choice = ["bat","bowl"]
     export let nxtComponent;
+    export let matchId;
 
     let toss = ""; 
     let choseTo;
     function updateTossDetails(toss,choseTo){
 
         if (toss!="" && choseTo){
-            if ($match.homeTeam.name==toss){
-                $match.awayTeam.tossWon = false
-                $match.homeTeam.tossWon = true
-                $match.awayTeam.choseTo = null
-                $match.homeTeam.choseTo = choseTo
+            if ($matches[matchId].homeTeam.name==toss){
+                $matches[matchId].awayTeam.tossWon = false
+                $matches[matchId].homeTeam.tossWon = true
+                $matches[matchId].awayTeam.choseTo = null
+                $matches[matchId].homeTeam.choseTo = choseTo
             }
-            else if($match.awayTeam.name==toss){
-                $match.homeTeam.tossWon = false
-                $match.awayTeam.tossWon = true
-                $match.homeTeam.choseTo = null
-                $match.awayTeam.choseTo = choseTo
+            else if($matches[matchId].awayTeam.name==toss){
+                $matches[matchId].homeTeam.tossWon = false
+                $matches[matchId].awayTeam.tossWon = true
+                $matches[matchId].homeTeam.choseTo = null
+                $matches[matchId].awayTeam.choseTo = choseTo
             }
         }
         
@@ -28,10 +29,10 @@
     $:updateTossDetails(toss,choseTo)
 
     function startMatch(){
-        if ($match.homeTeam.team.length<11 || $match.awayTeam.team.length<11){
+        if ($matches[matchId].homeTeam.team.length<11 || $matches[matchId].awayTeam.team.length<11){
             alert("Not enought members to play! Each teammust have exactly 11 members")
         }
-        else if(!$match.homeTeam.name.length || !$match.awayTeam.name.length){
+        else if(!$matches[matchId].homeTeam.name.length || !$matches[matchId].awayTeam.name.length){
             alert("Invalid Team Name!")
         }
         else if(toss=="" || !choseTo){
@@ -44,24 +45,24 @@
 </script>
 
 <label>
-    Home Team <input type="text" bind:value={$match.homeTeam.name} />
+    Home Team <input type="text" bind:value={$matches[matchId].homeTeam.name} />
 </label>
 
 <label>
-    Away Team <input type="text" bind:value={$match.awayTeam.name} />
+    Away Team <input type="text" bind:value={$matches[matchId].awayTeam.name} />
 </label>
 
-{#if ($match.homeTeam.name && $match.awayTeam.name)}
+{#if ($matches[matchId].homeTeam.name && $matches[matchId].awayTeam.name)}
     <div>
         Toss won By :
         <label>
-            <input type=radio bind:group={toss} value={$match.homeTeam.name} checked>
-            {$match.homeTeam.name}
+            <input type=radio bind:group={toss} value={$matches[matchId].homeTeam.name} checked>
+            {$matches[matchId].homeTeam.name}
         </label>
         
         <label>
-            <input type=radio bind:group={toss} value={$match.awayTeam.name}>
-            {$match.awayTeam.name}
+            <input type=radio bind:group={toss} value={$matches[matchId].awayTeam.name}>
+            {$matches[matchId].awayTeam.name}
         </label>
     </div>
 {/if}
@@ -79,9 +80,9 @@
 {/if}
 
 
-<AddPlayers bind:team={$match.homeTeam.team}/>
+<AddPlayers bind:team={$matches[matchId].homeTeam.team}/>
 
-<AddPlayers bind:team={$match.awayTeam.team}/>
+<AddPlayers bind:team={$matches[matchId].awayTeam.team}/>
 
 <button on:click={startMatch}>
     Start Match

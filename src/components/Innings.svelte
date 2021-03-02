@@ -25,13 +25,7 @@
     innings.batsmen = battingTeam.team.map(function(player) { return {playername:player,runsScored:0,fours:0,sixes:0,ballsUsed:0,yetToBat:true}});
     innings.bowlers = bowlingTeam.team.map(function(player) { return {playername:player,oversBowled:"0.0",wicketsTaken:0,runsgiven:0}});
 
-    innings.totalScore = 0;
-    innings.wicketsDown = 0;
-    innings.oversCompleted = 0;
-    innings.runsPerBall = []
-    innings.wickets = []
 
-    
     $: yetTobat = innings.batsmen.filter(player => player.yetToBat)
     
     function updateInningsData(){
@@ -42,10 +36,12 @@
 
     function displayCommentary(event){
         commentary=[{id:commentary.length,...event.detail},...commentary]
+        dispatch('updateDB',"Ball Bowled");
     }
     function removeCommentary(event){
         commentary=commentary.slice(1);
         console.log(commentary)
+        dispatch('updateDB',"Corrected Previous Delivery");
     }
 </script>
 <style>
@@ -84,7 +80,18 @@
                 <p>Non Striker's end {`${nonStriker.playername} ${nonStriker.runsScored} ${nonStriker.ballsUsed}`}</p>
                 <p>Current Bowler    {currentBowler.playername}</p>
             </div>
-            <Overs bind:striker bind:nonStriker bind:currentBowler bind:yetTobat totalOvers={overs}  bind:innings={innings} on:inningsEnd={() => updateInningsData()} on:result on:ballBowled={displayCommentary} on:undoLastBall={removeCommentary}/>
+            <Overs 
+                bind:striker 
+                bind:nonStriker 
+                bind:currentBowler 
+                bind:yetTobat 
+                totalOvers={overs}  
+                bind:innings={innings} 
+                on:inningsEnd={() => updateInningsData()} 
+                on:result 
+                on:ballBowled={displayCommentary} 
+                on:undoLastBall={removeCommentary}
+            />
 
             <!-- {#if (nthInnings=="Second")}
                 

@@ -1,53 +1,61 @@
 <script>
-    import {match} from "../stores/matchStore.js"
+    import {getDB,updateExistingMatch} from "../MatchesDB.js"
+
+    import {matches} from "../stores/Matches.js"
+    
+    import Home from "./Home.svelte"
     import ScoreCard from "./ScoreCard.svelte"
     import Innings from "./Innings.svelte"
 
-    // import { writable } from 'svelte/store'
-    // import { setContext } from 'svelte';
-    // $:{
-    //     console.log("HomeTeam",$homeTeam.name,$homeTeam.tossWon,$homeTeam.choseTo)
-    //     console.log("AwayTeam",$awayTeam.name,$awayTeam.tossWon,$awayTeam.choseTo)
-    // }
 
+    export let matchId;
+    export let nxtComponent;
+
+    let cricDB;
     let startSecondInnings=false;
     let showScorecard = false;
     
     function getTeam(choice){
-        if ($match.homeTeam.tossWon){
-            if($match.homeTeam.choseTo==choice){
-                return $match.homeTeam
+        if ($matches[matchId].homeTeam.tossWon){
+            if($matches[matchId].homeTeam.choseTo==choice){
+                return $matches[matchId].homeTeam
             }
             else{
-                return $match.awayTeam
+                return $matches[matchId].awayTeam
             }
         }
         else{
-            if($match.awayTeam.choseTo==choice){
-                return $match.awayTeam
+            if($matches[matchId].awayTeam.choseTo==choice){
+                return $matches[matchId].awayTeam
             }
             else{
-                return $match.homeTeam
+                return $matches[matchId].homeTeam
             }
         }
     }
 
-    function setTarget(event){
-        $match.target = event.detail;
+    async function setTarget(event){
+        $matches[matchId].target = event.detail;
         startSecondInnings=true;
+        updateDatabase();
     }
 
-    function showResult(event){
+    async function showResult(event){
         console.log("Calculating REsult....inside Match Component")
         if(event.detail==0){
-            $match.result= getTeam("bowl").name
+            $matches[matchId].result= getTeam("bowl").name
         }
         else if(event.detail==1){
-            $match.result= getTeam("bat").name
+            $matches[matchId].result= getTeam("bat").name
         }
         else{
-            $match.result = event.detail
+            $matches[matchId].result = event.detail
         }
+        updateDatabase();
+    }
+    async function updateDatabase(){
+        cricDB = await getDB();
+        updateExistingMatch(cricDB,$matches[matchId]);
     }
 </script>
 
@@ -57,21 +65,36 @@
     }
 </style>
 
-<h2>{$match.homeTeam.name} VS {$match.awayTeam.name}</h2>
+<h2>{$matches[matchId].homeTeam.name} VS {$matches[matchId].awayTeam.name}</h2>
 
-{#if ($match.result)}
-    <h5>Match Result - {$match.result}</h5>
+{#if ($matches[matchId].result)}
+    <h5>Match Result - {$matches[matchId].result}</h5>
+    <button on:click={() => nxtComponent=Home}>Back to Home Page</button>
 {/if}
 
-<p>{$match.homeTeam.tossWon? $match.homeTeam.name : $match.awayTeam.name} won the Toss and Elected to {$match.homeTeam.tossWon? $match.homeTeam.choseTo : $match.awayTeam.choseTo}</p>
+<p>{$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.name : $matches[matchId].awayTeam.name} won the Toss and Elected to {$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.choseTo : $matches[matchId].awayTeam.choseTo}</p>
 <button on:click={() => showScorecard=true}>ScoreCard</button>
 {#if showScorecard}
-    <ScoreCard bind:matchSummary={$match.Innings} bind:showScorecard/>
+    <ScoreCard bind:matchSummary={$matches[matchId].Innings} bind:showScorecard/>
 {/if}
 <main class="{showScorecard?'hide' : ''}">
-    <Innings battingTeam={getTeam("bat")} bowlingTeam={getTeam("bowl")} bind:innings={$match.Innings.First} nthInnings="First" on:firstInningsEnd={setTarget}/>
+    <Innings 
+        battingTeam={getTeam("bat")} 
+        bowlingTeam={getTeam("bowl")} 
+        bind:innings={$matches[matchId].Innings.First} 
+        nthInnings="First" 
+        on:firstInningsEnd={setTarget}
+        on:updateDB={updateDatabase}
+    />
     {#if (startSecondInnings)}
-        <Innings battingTeam={getTeam("bowl")} bowlingTeam={getTeam("bat")} bind:innings={$match.Innings.Second} nthInnings="Second" bind:target={$match.target} on:result={showResult}/>
+        <Innings    
+            battingTeam={getTeam("bowl")} 
+            bowlingTeam={getTeam("bat")} 
+            bind:innings={$matches[matchId].Innings.Second} 
+            nthInnings="Second" bind:target={$matches[matchId].target} 
+            on:result={showResult}
+            on:updateDB={updateDatabase}
+        />
     {/if}
 </main>
 

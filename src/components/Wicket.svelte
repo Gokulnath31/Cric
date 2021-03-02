@@ -14,7 +14,7 @@
     let type;
     let fielder;
     let batsmanWhoGotOut;
-
+    $:console.log(batsmanWhoGotOut)
     function updateBowler(type){
         if(type=="catch" || type=="hitout"){
             currentBowler.wicketsTaken +=1
@@ -40,7 +40,7 @@
     $:updateBowler(type);
     function addWicket(){
         handleWicket=false
-        wickets.push({out:batsmanWhoGotOut,"type":type,"fielder":fielder})
+        wickets.push({out:batsmanWhoGotOut,"type":type,"fielder":fielder,"at":wicket})
     }
 </script>
 

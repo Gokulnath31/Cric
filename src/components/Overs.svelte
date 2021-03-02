@@ -20,11 +20,10 @@
     $:console.log("target Inside Overs...",target)
     const dispatch = createEventDispatcher();
 
-    let extras=0;
     let noball,wide,b,lb,wicket;
     let balls = 0;
 
-    $: oversCompleted = Math.floor(balls/6).toString() + "." +(balls%6).toString();
+    $: innings.oversCompleted = Math.floor(balls/6).toString() + "." +(balls%6).toString();
 
     let endOfOver =false;
     let handleWicket = false;
@@ -46,7 +45,7 @@
                 dispatch('result',"Draw");
             }
         
-        } 
+        }
 
     }
 
@@ -142,7 +141,7 @@
        }
        innings.runsPerBall=[...innings.runsPerBall,ballData]
        
-       dispatch('ballBowled',{batsman:striker.playername,bowler:currentBowler.playername,ball:ballData,overs:oversCompleted});
+       dispatch('ballBowled',{batsman:striker.playername,bowler:currentBowler.playername,ball:ballData,overs:innings.oversCompleted});
        checkStriker(runs);
        updateOver(balls,extra);
     }
@@ -181,9 +180,30 @@
             striker.ballsUsed-=1
             balls-=1
         }
+        else if(happened=="W"){
+            innings.wicketsDown -=1
+            let previousWicket = innings.wickets.pop()
+            // console.log(previousWicket.out)
+            if(previousWicket.at=="s"){
+                console.log("Undoing wicket at striker's end")
+                striker = previousWicket.out
+                striker.yetToBat = true
+            }
+            else if(previousWicket.at=="ns"){
+                console.log("Undoing wicket at non-striker's end")
+                nonStriker = previousWicket.out
+                nonStriker.yetToBat = true
+            }
+            currentBowler.wicketsTaken -=1
+            currentBowler.runsgiven -= runsOnLastBall
+            innings.totalScore -= runsOnLastBall
+            striker.runsScored -= runsOnLastBall
+            striker.ballsUsed-=1
+            balls-=1
+        }
     }
 </script>
-<p>{oversCompleted}</p>
+<p>{innings.oversCompleted}</p>
 
 {#if (!hasEnded && handleWicket)}
     {console.log("CAlling Wicket")}
@@ -224,6 +244,6 @@
     <button on:click={() => processRuns(6)}>6</button>
 
     <button on:click={undoLastDelivery}>Undo last Ball</button>
-    <button on:click={() => processRuns(6)}>Replace Batsman</button>
-    <button on:click={() => processRuns(6)}>Replace Bowler</button>
+    <!-- <button on:click={() => processRuns(6)}>Replace Batsman</button>
+    <button on:click={() => processRuns(6)}>Replace Bowler</button> -->
 {/if}

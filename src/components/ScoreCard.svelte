@@ -1,7 +1,7 @@
 <script>
     export let matchSummary;
 
-    export let showScorecard;
+    export let showScorecard=true;
 
     console.log(matchSummary)
 
@@ -79,7 +79,7 @@
 
 
 
-    {#if (!isEmpty(matchSummary.Second))}
+    {#if (("batsmen" in (matchSummary.Second)) || ("bowlers" in (matchSummary.Second)))}
         Second Innings:
         <p>BAtting</p>
         <table>

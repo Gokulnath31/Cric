@@ -1,12 +1,14 @@
 <script>
-	import Team from "./components/Team.svelte"
-	import Match from "./components/Match.svelte"
-	let currentComponent = Team
+	import Home from "./components/Home.svelte"
+	// import Team from "./components/Team.svelte"
+
+	let matchId;
+	let currentComponent = Home
 	$:console.log(currentComponent)
 </script>
 
 <main>
-	<svelte:component this={currentComponent} bind:nxtComponent={currentComponent}/>
+	<svelte:component this={currentComponent} bind:nxtComponent={currentComponent} bind:matchId/>
 </main>
 
 <style>
