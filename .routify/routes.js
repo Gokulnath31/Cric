@@ -1,11 +1,11 @@
 
 /**
  * @roxi/routify 2.7.6
- * File generated Wed Mar 03 2021 12:34:14 GMT+0530 (India Standard Time)
+ * File generated Wed Mar 03 2021 14:43:31 GMT+0530 (India Standard Time)
  */
 
 export const __version = "2.7.6"
-export const __timestamp = "2021-03-03T07:04:14.230Z"
+export const __timestamp = "2021-03-03T09:13:31.178Z"
 
 //buildRoutes
 import { buildClientTree } from "@roxi/routify/runtime/buildRoutes"
@@ -48,6 +48,31 @@ export const _tree = {
       "path": "/index",
       "id": "_index",
       "component": () => import('../src/pages/index.svelte').then(m => m.default)
+    },
+    {
+      "isFile": true,
+      "isDir": false,
+      "file": "Match.svelte",
+      "filepath": "/Match.svelte",
+      "name": "Match",
+      "ext": "svelte",
+      "badExt": false,
+      "absolutePath": "/home/zoomrx/Desktop/svelte/Cric/src/pages/Match.svelte",
+      "importPath": "../src/pages/Match.svelte",
+      "isLayout": false,
+      "isReset": false,
+      "isIndex": false,
+      "isFallback": false,
+      "isPage": true,
+      "ownMeta": {},
+      "meta": {
+        "recursive": true,
+        "preload": false,
+        "prerender": true
+      },
+      "path": "/Match",
+      "id": "_Match",
+      "component": () => import('../src/pages/Match.svelte').then(m => m.default)
     },
     {
       "isFile": true,

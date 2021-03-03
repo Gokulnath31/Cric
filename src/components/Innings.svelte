@@ -24,9 +24,22 @@
     let striker,nonStriker,currentBowler;
     let commentary = [];
 
-    innings.batsmen = battingTeam.team.map(function(player) { return {playername:player,runsScored:0,fours:0,sixes:0,ballsUsed:0,yetToBat:true}});
-    innings.bowlers = bowlingTeam.team.map(function(player) { return {playername:player,oversBowled:"0.0",wicketsTaken:0,runsgiven:0}});
-
+    innings.batsmen = battingTeam.team.map(function(player) { return {  playername:player,
+                                                                        runsScored:0,
+                                                                        fours:0,
+                                                                        sixes:0,
+                                                                        ballsUsed:0,
+                                                                        yetToBat:true
+                                                                    }
+                                                                }
+                                                );
+    innings.bowlers = bowlingTeam.team.map(function(player) { return {  playername:player,
+                                                                        oversBowled:"0.0",
+                                                                        wicketsTaken:0,
+                                                                        runsgiven:0
+                                                                    }
+                                                                }
+                                            );
 
     $: yetTobat = innings.batsmen.filter(player => player.yetToBat)
     
@@ -66,7 +79,9 @@
                 <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type={BATSMAN}/>
                     
                 Opening bowler
-                <GetPlayer bind:squad={innings.bowlers} bind:chosenPlayer={currentBowler} type={BOWLER}/>
+                <GetPlayer  bind:squad={innings.bowlers} 
+                            bind:chosenPlayer={currentBowler} 
+                            type={BOWLER}/>
                 
                 <button type="submit">Start Innings</button>
             </form>

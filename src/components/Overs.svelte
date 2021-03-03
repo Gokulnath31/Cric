@@ -162,50 +162,60 @@
         if(runsOnLastBall%2==1){
             changeStrike()
         }
-        if (happened=="NB"){
-            striker.runsScored -= runsOnLastBall
-            innings.totalScore -= runsOnLastBall
-            currentBowler.runsgiven -= runsOnLastBall
+        switch(happened){
+            case "NB":
+                striker.runsScored -= runsOnLastBall
+                innings.totalScore -= runsOnLastBall
+                currentBowler.runsgiven -= runsOnLastBall
+                break;
+            case "Wd":
+                striker.runsScored -= runsOnLastBall
+                innings.totalScore -= runsOnLastBall +1
+                currentBowler.runsgiven -= runsOnLastBall + 1
+                break;
 
-        }
-        else if(happened=="Wd"){
-            striker.runsScored -= runsOnLastBall
-            innings.totalScore -= runsOnLastBall +1
-            currentBowler.runsgiven -= runsOnLastBall + 1
-        }
-        else if(happened=="b"){
-            currentBowler.runsgiven -= runsOnLastBall
-            innings.totalScore -= runsOnLastBall
-            striker.ballsUsed-=1
-            balls-=1
-        }
-        else if(happened=="R"){
-            currentBowler.runsgiven -= runsOnLastBall
-            innings.totalScore -= runsOnLastBall
-            striker.runsScored -= runsOnLastBall
-            striker.ballsUsed-=1
-            balls-=1
-        }
-        else if(happened=="W"){
-            innings.wicketsDown -=1
-            let previousWicket = innings.wickets.pop()
-            // console.log(previousWicket.out)
-            if(previousWicket.at==STRIKER){
-                console.log("Undoing wicket at striker's end")
-                striker = previousWicket.out
-                striker.yetToBat = true
-            }
-            else if(previousWicket.at==NONSTRIKER){
-                console.log("Undoing wicket at non-striker's end")
-                nonStriker = previousWicket.out
-                nonStriker.yetToBat = true
-            }
-            currentBowler.wicketsTaken -=1
-            currentBowler.runsgiven -= runsOnLastBall
-            innings.totalScore -= runsOnLastBall
-            striker.runsScored -= runsOnLastBall
-            striker.ballsUsed-=1
-            balls-=1
+            case "b":
+                currentBowler.runsgiven -= runsOnLastBall
+                innings.totalScore -= runsOnLastBall
+                striker.ballsUsed-=1
+                balls-=1
+                break;
+            case"R":
+                currentBowler.runsgiven -= runsOnLastBall
+                innings.totalScore -= runsOnLastBall
+                striker.runsScored -= runsOnLastBall
+                striker.ballsUsed-=1
+                balls-=1
+                break;
+            case "W":
+                innings.wicketsDown -=1
+                let previousWicket = innings.wickets.pop()
+                console.log("previousWicket",previousWicket)
+                // console.log(previousWicket.out)
+                if(previousWicket.at==STRIKER){
+                    console.log("Undoing wicket at striker's end")
+                    striker = previousWicket.out
+                    striker.yetToBat = true
+                }
+                else if(previousWicket.at==NONSTRIKER){
+                    console.log("Undoing wicket at non-striker's end")
+                    nonStriker = previousWicket.out
+                    nonStriker.yetToBat = true
+                }
+                currentBowler.wicketsTaken -=1
+                currentBowler.runsgiven -= runsOnLastBall
+                innings.totalScore -= runsOnLastBall
+                if(!previousWicket.runCross){
+                    striker.runsScored -= runsOnLastBall
+                    striker.ballsUsed-=1
+                }
+                if (previousWicket.runCross){
+                    changeStrike()
+                    striker.runsScored -= runsOnLastBall
+                    striker.ballsUsed-=1
+                    
+                }  
+                balls-=1
         }
     }
 </script>

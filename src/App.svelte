@@ -6,7 +6,7 @@
 </script>
 
 <main>
-	<Router {routes} config={{useHash: true}} />
+	<Router {routes}/>
 </main>
 
 <style>

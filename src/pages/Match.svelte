@@ -1,17 +1,17 @@
 <script>
     import {FIRST_INNINGS,SECOND_INNINGS,BATTING,BOWLING} from "../constants.js"
 
-    import {getDB,updateExistingMatch} from "../MatchesDB.js"
+    import {updateExistingMatch} from "../MatchesDB.js"
 
     import {matches} from "../stores/Matches.js"
     
     import ScoreCard from "../components/ScoreCard.svelte"
-    import Innings from "./Innings.svelte"
+    import Innings from "../components/Innings.svelte"
 
+    import {goto, params } from '@roxi/routify'
 
-    export let matchId;
+    let matchId=$params.matchId;;
     
-
     let cricDB;
     let startSecondInnings=false;
     let showScorecard = false;
@@ -55,8 +55,7 @@
         updateDatabase();
     }
     async function updateDatabase(){
-        cricDB = await getDB();
-        updateExistingMatch(cricDB,$matches[matchId]);
+        updateExistingMatch($matches[matchId]);
     }
 </script>
 
@@ -70,7 +69,7 @@
 
 {#if ($matches[matchId].result)}
     <h5>Match Result - {$matches[matchId].result}</h5>
-    <button on:click={() => nxtComponent=Home}>Back to Home Page</button>
+    <button on:click={() => $goto("/",)}>Back to Home Page</button>
 {/if}
 
 <p>{$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.name : $matches[matchId].awayTeam.name} won the Toss and Elected to {$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.choseTo : $matches[matchId].awayTeam.choseTo}</p>

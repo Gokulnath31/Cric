@@ -1,16 +1,12 @@
-
 <script>
-        console.log("Team")
         import {BATTING,BOWLING} from "../constants.js"
     
         import {matches} from "../stores/Matches.js"
         import AddPlayers from "../components/AddPlayers.svelte"
         
 
-        import { params } from '@roxi/routify'
-        console.log($params) 
-
-        
+        import {goto, params } from '@roxi/routify'
+    
         let matchId=$params.matchId;
         console.log($matches)
         let toss = ""; 
@@ -46,7 +42,7 @@
                 alert("Update the Toss Details")
             }
             else{
-                //Match redirect to matchComponent
+                $goto("/Match",{'matchId':matchId})
             }
         }
 </script>

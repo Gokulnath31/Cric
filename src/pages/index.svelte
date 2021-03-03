@@ -3,7 +3,7 @@
     import {matches} from "../stores/Matches.js"
     import ScoreCard from "../components/ScoreCard.svelte"
 
-    import { url } from '@roxi/routify'
+    import {goto} from '@roxi/routify'
 
     let matchId;
     
@@ -31,7 +31,7 @@
         matchId = $matches.length-1
         let addRequest = await addNewMatch($matches[matchId])
         if (addRequest=="success"){
-            window.location.href = $url("/Team",{'matchId':matchId})
+            $goto("/Team",{'matchId':matchId})
         }
         
     }

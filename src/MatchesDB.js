@@ -1,4 +1,4 @@
-export async function getDB(){
+async function getDB(){
     let dbPromise = await indexedDB.open("Cric");
    
     dbPromise.onupgradeneeded = function() {
