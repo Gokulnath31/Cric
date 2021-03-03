@@ -20,8 +20,9 @@ export async function getDB(){
         };
     });
 }
-export async function addNewMatch(db,match){
+export async function addNewMatch(match){
     console.log("Adding Match")
+    let db = await getDB();
 
     let tx = db.transaction('matches', 'readwrite');
     let matches = tx.objectStore('matches');
@@ -31,17 +32,20 @@ export async function addNewMatch(db,match){
         request.onsuccess = function() { 
             console.log("New Matchcreated", request.result);
             resovle("success")
+            db.close();
         };
         request.onerror = function(){
             console.log("Error while creating a new MAtch")
+            db.close();
         }
     }); 
-
+    
 }
 
-export async function updateExistingMatch(db,match){
+export async function updateExistingMatch(match){
     console.log("Updating Match")
 
+    let db = await getDB();
     let tx = db.transaction('matches', 'readwrite');
     let matches = tx.objectStore('matches');
     let request = matches.put(match);
@@ -50,16 +54,18 @@ export async function updateExistingMatch(db,match){
         request.onsuccess = function() { 
             console.log("Updated Existing Match", request.result);
             resovle("success")
+            db.close();
         };
         request.onerror = function(){
             console.log("Error while creating a new MAtch")
+            db.close();
         }
     }); 
 
 }
 
-export async function getAllMatches(db){
-
+export async function getAllMatches(){
+    let db = await getDB();
     let tx = db.transaction('matches');
     let matches = tx.objectStore('matches');
     let request = await matches.getAll();
@@ -69,10 +75,12 @@ export async function getAllMatches(db){
         
         if (request.result !== undefined) {
             console.log(request.result)
-            resolve(request.result);       
+            resolve(request.result); 
+            db.close();      
         }
         else{
             resolve(false)
+            db.close();
         }
         };
     });

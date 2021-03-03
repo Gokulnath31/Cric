@@ -1,20 +1,12 @@
 <script>
-	import Home from "./components/Home.svelte"
-	// import Team from "./components/Team.svelte"
-	// import { Router } from "@roxi/routify";
-	// import { routes } from "../.routify/routes";
-
-	let matchId;
-	let currentComponent = Home
-
-	$:console.log(currentComponent)
+	
+	import { Router } from "@roxi/routify";
+	import { routes } from "../.routify/routes";
+	console.log(routes);
 </script>
 
 <main>
-	<svelte:component this={currentComponent} bind:nxtComponent={currentComponent} bind:matchId/>
-	<!-- src/App.svelte -->
-  
-	<!-- <Router {routes} /> -->
+	<Router {routes} config={{useHash: true}} />
 </main>
 
 <style>
@@ -24,14 +16,6 @@
 		max-width: 240px;
 		margin: 0 auto;
 	}
-
-	/* h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	} */
-
 	@media (min-width: 640px) {
 		main {
 			max-width: none;

@@ -31,8 +31,9 @@ function serve() {
 export default {
 	input: 'src/main.js',
 	output: {
+		inlineDynamicImports:true,
 		sourcemap: true,
-		format: 'iife',
+		format: 'esm',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
