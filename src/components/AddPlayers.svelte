@@ -9,7 +9,7 @@
             alert("Please enter a player name to add!")
         }
         else{
-                team.push(playerName)
+                team=[...team,playerName]
                 console.log(playerName,team) 
         }
         playerName=""

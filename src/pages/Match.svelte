@@ -69,7 +69,7 @@
 
 {#if ($matches[matchId].result)}
     <h5>Match Result - {$matches[matchId].result}</h5>
-    <button on:click={() => $goto("/",)}>Back to Home Page</button>
+    <button on:click={() => $goto("./",)}>Back to Home Page</button>
 {/if}
 
 <p>{$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.name : $matches[matchId].awayTeam.name} won the Toss and Elected to {$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.choseTo : $matches[matchId].awayTeam.choseTo}</p>

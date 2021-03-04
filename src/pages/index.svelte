@@ -31,7 +31,7 @@
         matchId = $matches.length-1
         let addRequest = await addNewMatch($matches[matchId])
         if (addRequest=="success"){
-            $goto("/Team",{'matchId':matchId})
+            $goto("./Team",{'matchId':matchId})
         }
         
     }

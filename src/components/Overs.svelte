@@ -159,7 +159,7 @@
         let runsOnLastBall = parseInt(lastBall[0])
         let happened = lastBall.slice(1)
         dispatch('undoLastBall',"By Mistake");
-        if(runsOnLastBall%2==1){
+        if(happened!="W" && runsOnLastBall%2==1){
             changeStrike()
         }
         switch(happened){
@@ -209,12 +209,19 @@
                     striker.runsScored -= runsOnLastBall
                     striker.ballsUsed-=1
                 }
-                if (previousWicket.runCross){
+                if (runsOnLastBall%2==0 && previousWicket.runCross){
                     changeStrike()
                     striker.runsScored -= runsOnLastBall
                     striker.ballsUsed-=1
                     
-                }  
+                }
+                else if (runsOnLastBall%2==1 && previousWicket.runCross){
+                    changeStrike()
+                    changeStrike()
+                    striker.runsScored -= runsOnLastBall
+                    striker.ballsUsed-=1
+                    
+                }    
                 balls-=1
         }
     }
