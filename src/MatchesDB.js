@@ -74,7 +74,7 @@ export async function getAllMatches(){
         request.onsuccess = function() {
         
         if (request.result !== undefined) {
-            console.log(request.result)
+            // console.log(request.result)
             resolve(request.result); 
             db.close();      
         }

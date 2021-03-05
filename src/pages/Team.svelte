@@ -6,6 +6,7 @@
         
 
         import {goto, params } from '@roxi/routify'
+        import {updateExistingMatch} from "../MatchesDB.js"
     
         let matchId=$params.matchId;
         console.log($matches)
@@ -32,7 +33,7 @@
         }
         $:updateTossDetails(toss,choseTo)
     
-        function startMatch(){
+        async function startMatch(){
             if ($matches[matchId].homeTeam.team.length<11 || $matches[matchId].awayTeam.team.length<11){
                 alert("Not enought members to play! Each teammust have exactly 11 members")
             }
@@ -43,11 +44,15 @@
                 alert("Update the Toss Details")
             }
             else{
+                await  updateExistingMatch($matches[matchId]);
                 $goto("./Match",{'matchId':matchId})
             }
         }
 </script>
 <style>
+    p,label{
+        color:white;
+    }
     #prev{
         position:relative;
         left:25vw;
@@ -60,6 +65,17 @@
     }
     .hide{
         display:none;
+    }
+    ul{
+        width:35%;
+        color:#c7ffd8;
+        margin:0 auto;    
+    }
+    li{
+        list-style-type:none;
+        background-color :#92A8D1;
+        padding:1rem 0;
+        margin:1rem;
     }
 </style>
 
@@ -77,7 +93,7 @@
     <div class="{current!=1 ? 'hide' : ''}">
         {#if ($matches[matchId].homeTeam.name && $matches[matchId].awayTeam.name)}
             <div>
-                Toss won By :
+                <p>Toss won By :</p>
                 <label>
                     <input type=radio bind:group={toss} value={$matches[matchId].homeTeam.name} checked>
                     {$matches[matchId].homeTeam.name}
@@ -107,7 +123,7 @@
     
     
     <div class="{current!=3 ? 'hide' : ''}">
-        Home Team
+        <p>Home Team</p>
         <AddPlayers bind:team={$matches[matchId].homeTeam.team}/>
         <ul>
             {#each $matches[matchId].homeTeam.team as player}
@@ -117,7 +133,7 @@
     </div>
     
     <div class="{current!=4 ? 'hide' : ''}">
-        Away Team
+        <p>Away Team</p>
         <AddPlayers bind:team={$matches[matchId].awayTeam.team}/>
         <ul>
             {#each $matches[matchId].awayTeam.team as player}

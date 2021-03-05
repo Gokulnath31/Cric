@@ -24,7 +24,7 @@
     let striker,nonStriker,currentBowler;
     let commentary = [];
 
-    innings.batsmen = battingTeam.team.map(function(player) { return {  playername:player,
+    innings.batsmen = innings?.batsmen ?? battingTeam.team.map(function(player) { return {  playername:player,
                                                                         runsScored:0,
                                                                         fours:0,
                                                                         sixes:0,
@@ -33,7 +33,7 @@
                                                                     }
                                                                 }
                                                 );
-    innings.bowlers = bowlingTeam.team.map(function(player) { return {  playername:player,
+    innings.bowlers = innings?.bowlers ?? bowlingTeam.team.map(function(player) { return {  playername:player,
                                                                         oversBowled:"0.0",
                                                                         wicketsTaken:0,
                                                                         runsgiven:0
@@ -60,42 +60,74 @@
     }
 </script>
 <style>
+    #startInnings{
+        background-color:white;
+        color:#001f3f;
+    }
     .container{
         display:grid;
         grid-gap: 5vmax;
         grid-template-columns: 70% 20%;
     }
+    .wrapper{
+        width:50%;
+        margin:0 auto;
+    }
+    .scorecard{
+        background-color:white;
+        color:#001f3f;
+        padding:2rem 0;
+        margin: 0 auto;
+    }
+    #nthInn{
+        color:white;
+    }
+    label{
+        color:white;
+        font-weight: 900;
+    }
+
 </style>
 <div class="container">
     <div>
         {#if (startOfInnings)}
             <form on:submit|preventDefault ="{() => startOfInnings=false}">
-                Opening batsmen
 
-                Batsman at Striker's End 
-                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={striker} type={BATSMAN}/>
+
+                <label>
+                    Batsman at Striker's End
+                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={striker} type={BATSMAN}/>
+                </label> 
                 
-                Batsman at Non-Striker's End 
-                <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type={BATSMAN}/>
+                
+                <label>
+                    Batsman at Non-Striker's End 
+                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type={BATSMAN}/>
+                </label>
                     
-                Opening bowler
-                <GetPlayer  bind:squad={innings.bowlers} 
-                            bind:chosenPlayer={currentBowler} 
-                            type={BOWLER}/>
+                <label>
+                    Bowler
+                    <GetPlayer  bind:squad={innings.bowlers} 
+                                bind:chosenPlayer={currentBowler} 
+                                type={BOWLER}/>
+                </label>
                 
-                <button type="submit">Start Innings</button>
+                <button id="startInnings" type="submit">Start Innings</button>
             </form>
         {/if}
 
 
 
         {#if (!startOfInnings && striker && nonStriker && currentBowler)}
-            <p>{nthInnings} Innings</p>
-            <div class="scorecard">
-                <h3>{battingTeam.name} {innings.totalScore} - {innings.wicketsDown}</h3>
-                <p>Striker'end       {`${striker.playername} ${striker.runsScored} ${striker.ballsUsed}`}</p>
-                <p>Non Striker's end {`${nonStriker.playername} ${nonStriker.runsScored} ${nonStriker.ballsUsed}`}</p>
-                <p>Current Bowler    {currentBowler.playername}</p>
+            <p id="nthInn">{nthInnings} Innings</p>
+            <div class="wrapper">
+                <div class="scorecard">
+                    <h3>{battingTeam.name} {innings.totalScore} - {innings.wicketsDown}</h3>
+                    <p>Striker'end       {`${striker.playername} ${striker.runsScored} ${striker.ballsUsed}`}</p>
+                    <p>Non Striker's end {`${nonStriker.playername} ${nonStriker.runsScored} ${nonStriker.ballsUsed}`}</p>
+                    <p>Current Bowler    {currentBowler.playername}</p>
+                    <p>{innings.oversCompleted}</p>
+                </div>
             </div>
             <Overs 
                 bind:striker 

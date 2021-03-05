@@ -12,8 +12,6 @@
 
     let matchId=$params.matchId;;
     
-    let cricDB;
-    let startSecondInnings=false;
     let showScorecard = false;
     
     function getTeam(choice){
@@ -37,7 +35,7 @@
 
     async function setTarget(event){
         $matches[matchId].target = event.detail;
-        startSecondInnings=true;
+        $matches[matchId].startSecondInnings=true;
         updateDatabase();
     }
 
@@ -57,45 +55,75 @@
     async function updateDatabase(){
         updateExistingMatch($matches[matchId]);
     }
+    
+    $:if($matches.length){
+        $matches[matchId].startSecondInnings= $matches[matchId]?.startSecondInnings ?? false;
+        console.log("STart second Innings",$matches[matchId].startSecondInnings)
+    }
 </script>
 
 <style>
     .hide{
         display: none;
     }
+    .wrapper{
+        width:100vw;
+        background-color:white;
+
+    }
+
+    .title{
+        color:#001f3f;
+        padding:2rem 0;
+        
+    }
+    .title button{
+        background-color:#001f3f;
+        color:white;
+    }
+    main{
+        padding:2rem 0; 
+    }
+    
 </style>
 
-<h2>{$matches[matchId].homeTeam.name} VS {$matches[matchId].awayTeam.name}</h2>
-
-{#if ($matches[matchId].result)}
-    <h5>Match Result - {$matches[matchId].result}</h5>
-    <button on:click={() => $goto("./",)}>Back to Home Page</button>
-{/if}
-
-<p>{$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.name : $matches[matchId].awayTeam.name} won the Toss and Elected to {$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.choseTo : $matches[matchId].awayTeam.choseTo}</p>
-<button on:click={() => showScorecard=true}>ScoreCard</button>
-{#if showScorecard}
-    <ScoreCard bind:matchSummary={$matches[matchId].Innings} bind:showScorecard/>
-{/if}
-<main class="{showScorecard?'hide' : ''}">
-    <Innings 
-        battingTeam={getTeam(BATTING)} 
-        bowlingTeam={getTeam(BOWLING)} 
-        bind:innings={$matches[matchId].Innings.First} 
-        nthInnings={FIRST_INNINGS} 
-        on:firstInningsEnd={setTarget}
-        on:updateDB={updateDatabase}
-    />
-    {#if (startSecondInnings)}
-        <Innings    
-            battingTeam={getTeam(BOWLING)} 
-            bowlingTeam={getTeam(BATTING)} 
-            bind:innings={$matches[matchId].Innings.Second} 
-            nthInnings={SECOND_INNINGS} 
-            bind:target={$matches[matchId].target} 
-            on:result={showResult}
+{#if $matches.length}
+    <div class="wrapper">
+        <div class="title">
+            <h2>{$matches[matchId].homeTeam.name} VS {$matches[matchId].awayTeam.name}</h2>
+            
+            {#if ($matches[matchId].result)}
+                <h5>Match Result - {$matches[matchId].result}</h5>
+                <button on:click={() => $goto("./",)}>Back to Home Page</button>
+            {/if}
+            
+            <p>{$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.name : $matches[matchId].awayTeam.name} won the Toss and Elected to {$matches[matchId].homeTeam.tossWon? $matches[matchId].homeTeam.choseTo : $matches[matchId].awayTeam.choseTo}</p>
+            <button on:click={() => showScorecard=true}>ScoreCard</button>
+        </div>
+    </div>
+    {#if showScorecard}
+        <ScoreCard bind:matchSummary={$matches[matchId].Innings} bind:showScorecard/>
+    {/if}
+    <main class="{showScorecard?'hide' : ''}">
+        <Innings 
+            battingTeam={getTeam(BATTING)} 
+            bowlingTeam={getTeam(BOWLING)} 
+            bind:innings={$matches[matchId].Innings.First} 
+            nthInnings={FIRST_INNINGS} 
+            on:firstInningsEnd={setTarget}
             on:updateDB={updateDatabase}
         />
-    {/if}
-</main>
+        {#if ($matches[matchId].startSecondInnings)}
+            <Innings    
+                battingTeam={getTeam(BOWLING)} 
+                bowlingTeam={getTeam(BATTING)} 
+                bind:innings={$matches[matchId].Innings.Second} 
+                nthInnings={SECOND_INNINGS} 
+                bind:target={$matches[matchId].target} 
+                on:result={showResult}
+                on:updateDB={updateDatabase}
+            />
+        {/if}
+    </main>
+{/if}
 

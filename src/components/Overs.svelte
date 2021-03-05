@@ -7,7 +7,6 @@
     import { createEventDispatcher } from 'svelte';
     import { getContext } from 'svelte';
 
-
     export let striker;
     export let nonStriker;
     export let currentBowler;
@@ -19,13 +18,12 @@
     const nthInnings = getContext("nthInnings");
     const target = getContext("target");
 
-    $:console.log("target Inside Overs...",target)
     const dispatch = createEventDispatcher();
 
     let noball,wide,b,lb,wicket;
-    let balls = 0;
+    innings.balls = innings ?. balls ?? 0;
 
-    $: innings.oversCompleted = Math.floor(balls/6).toString() + "." +(balls%6).toString();
+    $: innings.oversCompleted = Math.floor(innings.balls/6).toString() + "." +(innings.balls%6).toString();
 
     let endOfOver =false;
     let handleWicket = false;
@@ -52,7 +50,6 @@
     }
 
     function hasInningsEnded(balls,wicketsDown,score){
-        // console.log(totalOvers,balls,wicketsDown)
         if(innings.wicketsDown==10 || (balls/6)===totalOvers){
             hasEnded = true;
         }
@@ -88,11 +85,11 @@
     }
     function updateBowlerDetails(currentBowler){
         let split = currentBowler.oversBowled.split(".")
-        if(balls%6 == 0){
+        if(innings.balls%6 == 0){
             currentBowler.oversBowled = `${parseInt(split[0])+1}.${split[1]}`;
         }
         else{
-            split[1] += balls%6
+            split[1] += innings.balls%6
             split[0] += Match.floor(split[1])
             split[1] %=6  
             currentBowler.oversBowled = split.join(".")
@@ -114,6 +111,7 @@
        if(noball){
             updateRuns(runs + 1);
             updateBatsmanRuns(striker,runs);
+            striker.ballsUsed+=1
             ballData = `${runs}NB`
             extra=true;
        }
@@ -125,14 +123,14 @@
        else if (b || lb){  
             updateRuns(runs);
             striker.ballsUsed+=1
-            balls +=1;
+            innings.balls +=1;
             ballData = `${runs}b`
        }
        else{
             updateRuns(runs);
             updateBatsmanRuns(striker,runs);
             striker.ballsUsed+=1
-            balls+=1
+            innings.balls+=1
             ballData = `${runs}R`
        } 
        if(!noball && wicket){
@@ -149,10 +147,10 @@
                                 overs:innings.oversCompleted
                             });
        checkStriker(runs);
-       updateOver(balls,extra);
+       updateOver(innings.balls,extra);
+
     }
-    $:hasInningsEnded(balls,innings.wicketsDown,innings.totalScore)
-    // $:console.log(innings)
+    $:hasInningsEnded(innings.balls,innings.wicketsDown,innings.totalScore)
 
     function undoLastDelivery(){
         let lastBall = innings.runsPerBall.pop()
@@ -178,14 +176,14 @@
                 currentBowler.runsgiven -= runsOnLastBall
                 innings.totalScore -= runsOnLastBall
                 striker.ballsUsed-=1
-                balls-=1
+                innings.balls-=1
                 break;
             case"R":
                 currentBowler.runsgiven -= runsOnLastBall
                 innings.totalScore -= runsOnLastBall
                 striker.runsScored -= runsOnLastBall
                 striker.ballsUsed-=1
-                balls-=1
+                innings.balls-=1
                 break;
             case "W":
                 innings.wicketsDown -=1
@@ -222,11 +220,15 @@
                     striker.ballsUsed-=1
                     
                 }    
-                balls-=1
+                innings.balls-=1
         }
     }
 </script>
-<p>{innings.oversCompleted}</p>
+<style>
+    label{
+        color:white;
+    }
+</style>
 
 {#if (!hasEnded && handleWicket)}
     {console.log("CAlling Wicket")}
@@ -249,23 +251,28 @@
 {/if}
 {#if (!hasEnded && !handleWicket && !endOfOver)}
     <label>
-	<input type="checkbox" bind:checked={noball}>
+    <input  type="checkbox" 
+            bind:checked={noball}>
 	    No Ball
     </label>
     <label>
-        <input type="checkbox" bind:checked={wide}>
+        <input  type="checkbox" 
+                bind:checked={wide}>
         Wide
     </label>
     <label>
-        <input type="checkbox" bind:checked={b}>
+        <input type="checkbox" 
+                bind:checked={b}>
         Byes
     </label>
     <label>
-        <input type="checkbox" bind:checked={lb}>
+        <input  type="checkbox" 
+                bind:checked={lb} >
         Leg Byes
     </label>
     <label>
-        <input type="checkbox" bind:checked={wicket}>
+        <input  type="checkbox" 
+                bind:checked={wicket}>
         Wicket
     </label>
 

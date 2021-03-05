@@ -26,11 +26,18 @@
     .hide{
         display: none;
     }
+    table{
+        margin:0 auto;
+        color:white;
+    }
+    p{
+        color:white;
+    }
 </style>
 <main class="{!showScorecard?'hide' : ''}">
 
     <button on:click={() => showScorecard=false}>Back</button>
-    <p>First Innings:</p>
+    <p>First Innings</p>
 
     <p>BAtting</p>
     <table>
@@ -80,7 +87,9 @@
 
 
     {#if (("batsmen" in (matchSummary.Second)) || ("bowlers" in (matchSummary.Second)))}
-        Second Innings:
+        <p>
+            Second Innings
+        </p>
         <p>BAtting</p>
         <table>
             <tr>
