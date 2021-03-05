@@ -1,7 +1,7 @@
 ---
 
 # Cric
-
+Cricket Scorers usually use a handbook to keep track of the match.Later they have to manually make entry of the same data into a database for future reference.The goal is to convert the paper scorebook to digital scorebook.This application  gets the match data  for each ball and stores it in the database at the clientSide using IndexedDB.
 
 ## Get started
 
