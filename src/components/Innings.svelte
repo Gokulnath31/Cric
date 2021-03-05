@@ -68,6 +68,7 @@
         display:grid;
         grid-gap: 5vmax;
         grid-template-columns: 70% 20%;
+        padding:2rem 0;
     }
     .wrapper{
         width:50%;
@@ -81,6 +82,12 @@
     }
     #nthInn{
         color:white;
+    }
+    #commentary{
+        height:18rem;
+        overflow: auto;
+        color:white;
+        border:1px solid white;
     }
     label{
         color:white;
@@ -148,7 +155,7 @@
             {/if} -->
         {/if}
     </div>
-    <div>
+    <div id="commentary">
 
             {#each commentary as ball (ball)}
                 <p> {ball.overs} {ball.bowler} to {ball.batsman} {ball.ball} {ball.ball}</p>
