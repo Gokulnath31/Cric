@@ -4,8 +4,8 @@
     import GetPlayer from "./GetPlayer.svelte"
     import Overs from "./Overs.svelte"
 
-    import { createEventDispatcher } from 'svelte';
-    import { setContext} from 'svelte';
+    import {onMount, setContext,createEventDispatcher } from 'svelte';
+
     
     const dispatch = createEventDispatcher();
 
@@ -14,15 +14,23 @@
     export let innings;
     export let nthInnings;
     export let target;
-    
+
+    let overs = 5;
+    let commentary=[];
+
+
+
     setContext('nthInnings', nthInnings);
     setContext('target', target);
 
-    let startOfInnings = true;
+    innings.startOfInnings = innings?.startOfInnings ?? true;
 
-    let overs = 5;
-    let striker,nonStriker,currentBowler;
-    let commentary = [];
+
+    innings.striker = innings ?.striker;
+    innings.nonStriker = innings ?.nonStriker;
+    innings.currentBowler = innings?.currentBowler;
+
+    
 
     innings.batsmen = innings?.batsmen ?? battingTeam.team.map(function(player) { return {  playername:player,
                                                                         runsScored:0,
@@ -40,7 +48,7 @@
                                                                     }
                                                                 }
                                             );
-
+    
     $: yetTobat = innings.batsmen.filter(player => player.yetToBat)
     
     function updateInningsData(){
@@ -97,25 +105,25 @@
 </style>
 <div class="container">
     <div>
-        {#if (startOfInnings)}
-            <form on:submit|preventDefault ="{() => startOfInnings=false}">
+        {#if (innings.startOfInnings)}
+            <form on:submit|preventDefault ="{() => innings.startOfInnings=false}">
 
 
                 <label>
                     Batsman at Striker's End
-                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={striker} type={BATSMAN}/>
+                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={innings.striker} type={BATSMAN}/>
                 </label> 
                 
                 
                 <label>
                     Batsman at Non-Striker's End 
-                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={nonStriker} type={BATSMAN}/>
+                    <GetPlayer bind:squad={yetTobat} bind:chosenPlayer={innings.nonStriker} type={BATSMAN}/>
                 </label>
                     
                 <label>
                     Bowler
                     <GetPlayer  bind:squad={innings.bowlers} 
-                                bind:chosenPlayer={currentBowler} 
+                                bind:chosenPlayer={innings.currentBowler} 
                                 type={BOWLER}/>
                 </label>
                 
@@ -125,21 +133,21 @@
 
 
 
-        {#if (!startOfInnings && striker && nonStriker && currentBowler)}
+        {#if (!innings.startOfInnings && innings.striker && innings.nonStriker && innings.currentBowler)}
             <p id="nthInn">{nthInnings} Innings</p>
             <div class="wrapper">
                 <div class="scorecard">
                     <h3>{battingTeam.name} {innings.totalScore} - {innings.wicketsDown}</h3>
-                    <p>Striker'end       {`${striker.playername} ${striker.runsScored} ${striker.ballsUsed}`}</p>
-                    <p>Non Striker's end {`${nonStriker.playername} ${nonStriker.runsScored} ${nonStriker.ballsUsed}`}</p>
-                    <p>Current Bowler    {currentBowler.playername}</p>
+                    <p>Striker'end       {`${innings.striker.playername} ${innings.striker.runsScored} ${innings.striker.ballsUsed}`}</p>
+                    <p>Non Striker's end {`${innings.nonStriker.playername} ${innings.nonStriker.runsScored} ${innings.nonStriker.ballsUsed}`}</p>
+                    <p>Current Bowler    {innings.currentBowler.playername}</p>
                     <p>{innings.oversCompleted}</p>
                 </div>
             </div>
             <Overs 
-                bind:striker 
-                bind:nonStriker 
-                bind:currentBowler 
+                bind:striker={innings.striker} 
+                bind:nonStriker={innings.nonStriker} 
+                bind:currentBowler={innings.currentBowler} 
                 bind:yetTobat 
                 totalOvers={overs}  
                 bind:innings={innings} 
