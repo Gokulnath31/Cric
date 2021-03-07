@@ -16,7 +16,7 @@
     export let target;
 
     let overs = 5;
-    let commentary=[];
+    innings.commentary= innings?.commentary??[];
 
 
 
@@ -58,12 +58,11 @@
     }
 
     function displayCommentary(event){
-        commentary=[{id:commentary.length,...event.detail},...commentary]
+        innings.commentary=[{id:innings.commentary.length,...event.detail},...innings.commentary]
         dispatch('updateDB',"Ball Bowled");
     }
     function removeCommentary(event){
-        commentary=commentary.slice(1);
-        console.log(commentary)
+        innings.commentary=innings.commentary.slice(1);
         dispatch('updateDB',"Corrected Previous Delivery");
     }
 </script>
@@ -165,7 +164,7 @@
     </div>
     <div id="commentary">
 
-            {#each commentary as ball (ball)}
+            {#each innings.commentary as ball (ball.id)}
                 <p> {ball.overs} {ball.bowler} to {ball.batsman} {ball.ball} {ball.ball}</p>
                 
             {/each} 
