@@ -86,8 +86,6 @@
     }
     
 </style>
-
-{#if $matches.length}
     <div class="wrapper">
         <div class="title">
             <h2>{$matches[matchId].homeTeam.name} VS {$matches[matchId].awayTeam.name}</h2>
@@ -125,5 +123,4 @@
             />
         {/if}
     </main>
-{/if}
 

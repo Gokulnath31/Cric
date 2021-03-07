@@ -9,12 +9,14 @@
     import {getAllMatches} from "../MatchesDB.js"
     import {matches} from "../stores/Matches.js"
 
-    onMount(async () => {
-		$matches = await getAllMatches()
-        console.log($matches);
-        $ready();
-    });
+    // onMount(async () => {
+	// 	$matches = await getAllMatches()
+    //     console.log($matches);
+    //     $ready();
+    // });
     
     $:console.log("Inside _layout",$matches)
 </script>
-<slot />
+{#if $matches.length}
+    <slot />
+{/if}
