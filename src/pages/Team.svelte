@@ -13,6 +13,7 @@
         let toss = ""; 
         let choseTo;
         let current=0;
+        let divs=[" ","hide","hide","hide","hide"];
         function updateTossDetails(toss,choseTo){
     
             if (toss!="" && choseTo){
@@ -48,6 +49,16 @@
                 $goto("./Match",{'matchId':matchId})
             }
         }
+        function handlePrev(){
+            divs[current] = "hide";
+            current -=1; 
+            divs[current] =  " ";
+        }
+        function handleNext(){
+            divs[current] = "hide";
+            current +=1; 
+            divs[current] = " ";
+        }
 </script>
 <style>
     p,label{
@@ -80,7 +91,7 @@
 </style>
 
 <section>
-    <div class="{current!=0 ? 'hide' : ''}">
+    <div class={divs[0]}>
         <label>
             Home Team <input type="text" bind:value={$matches[matchId].homeTeam.name} />
         </label>
@@ -90,7 +101,7 @@
         </label>
     </div>
     
-    <div class="{current!=1 ? 'hide' : ''}">
+    <div class={divs[1]} >
         {#if ($matches[matchId].homeTeam.name && $matches[matchId].awayTeam.name)}
             <div>
                 <p>Toss won By :</p>
@@ -107,7 +118,7 @@
         {/if}
     </div>
     
-    <div class="{current!=2 ? 'hide' : ''}">
+    <div class={divs[2]}>
         {#if toss}
             <p>{toss} won the toss and Elected to</p>
             <label>
@@ -122,7 +133,7 @@
     </div>
     
     
-    <div class="{current!=3 ? 'hide' : ''}">
+    <div class={divs[3]}>
         <p>Home Team</p>
         <AddPlayers bind:team={$matches[matchId].homeTeam.team}/>
         <ul>
@@ -132,7 +143,7 @@
         </ul>
     </div>
     
-    <div class="{current!=4 ? 'hide' : ''}">
+    <div class={divs[4]}>
         <p>Away Team</p>
         <AddPlayers bind:team={$matches[matchId].awayTeam.team}/>
         <ul>
@@ -145,6 +156,6 @@
             Start Match
         </button>
     </div>
-    <button id="prev" class="{current==0 ? 'hide' : ''}" on:click={() => current-=1}>Prev</button>
-    <button id="next" class="{current==4 ? 'hide' : ''}" on:click={() => current+=1}>Next</button>
+    <button id="prev" class="{current==0 ? 'hide' : ''}" on:click={handlePrev}>Prev</button>
+    <button id="next" class="{current==4 ? 'hide' : ''}" on:click={handleNext}>Next</button>
 </section>
