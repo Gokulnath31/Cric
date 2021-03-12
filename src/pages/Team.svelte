@@ -46,7 +46,7 @@
             }
             else{
                 await  updateExistingMatch($matches[matchId]);
-                $goto("./Match",{'matchId':matchId})
+                $goto("./:matchId",{matchId})
             }
         }
         function handlePrev(){

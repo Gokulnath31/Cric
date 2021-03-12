@@ -10,22 +10,23 @@
     let showScorecard;
     
     async function NewMatch(){
-        let tid = $matches.length
-        let newMatch = {id:tid,
-            homeTeam : {name:"",team:[],tossWon:false},
-            awayTeam : {name:"",team:[],tossWon:false},
-            result:"",
-            Innings : {
-                First : {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]},
-                Second: {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]}  
+        // let tid = $matches.length
+        // let newMatch = {id:tid,
+        //     homeTeam : {name:"",team:[],tossWon:false},
+        //     awayTeam : {name:"",team:[],tossWon:false},
+        //     result:"",
+        //     Innings : {
+        //         First : {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]},
+        //         Second: {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]}  
             
-            }
-        }
-        newMatch.id = $matches.length
-        $matches =[...$matches,newMatch]
-        matchId = $matches.length-1
-        let addRequest = await addNewMatch($matches[matchId])
-        if (addRequest=="success"){
+        //     }
+        // }
+        // newMatch.id = $matches.length
+        // $matches =[...$matches,newMatch]
+        
+        let addRequest = await matches.addMatch($matches) //addNewMatch($matches[matchId])
+        if (addRequest=="added"){
+            matchId = $matches.length-1
             $goto("./Team",{'matchId':matchId})// use []
         }
         

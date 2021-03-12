@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import {getAllMatches} from "../MatchesDB.js"
+import {getAllMatches,addNewMatch} from "../MatchesDB.js"
 
 
 
@@ -8,7 +8,32 @@ export let matches = (() => {
     getAllMatches().then(r => {
         set(r);
     });
-    return {subscribe,set,update};
+
+    async function addMatch(store){
+            let id = store.length;
+            let newMatch = {id:id,
+                homeTeam : {name:"",team:[],tossWon:false},
+                awayTeam : {name:"",team:[],tossWon:false},
+                result:"",
+                Innings : {
+                    First : {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]},
+                    Second: {totalScore:0,wicketsDown:0,oversCompleted:0,runsPerBall:[],wickets:[]}  
+                
+                }
+            }
+            newMatch.id = id
+            store = [...store,newMatch]
+            let addRequest = await addNewMatch(store[id])
+            return new Promise(function(resovle,reject){
+
+                if(addRequest=="success"){
+                    console.log("MAtch added SUccessfully iniside store");
+                    resovle("added")
+                }
+            });
+    }
+
+    return {subscribe,set,update,addMatch};
 })();
 
 

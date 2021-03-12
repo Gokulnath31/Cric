@@ -1,11 +1,11 @@
 
 /**
- * @roxi/routify 2.13.1
- * File generated Sun Mar 07 2021 13:43:40 GMT+0530 (India Standard Time)
+ * @roxi/routify 2.7.6
+ * File generated Tue Mar 09 2021 08:35:30 GMT+0530 (India Standard Time)
  */
 
-export const __version = "2.13.1"
-export const __timestamp = "2021-03-07T08:13:40.194Z"
+export const __version = "2.7.6"
+export const __timestamp = "2021-03-09T03:05:30.575Z"
 
 //buildRoutes
 import { buildClientTree } from "@roxi/routify/runtime/buildRoutes"
@@ -22,8 +22,33 @@ export const _tree = {
   "filepath": "/_layout.svelte",
   "root": true,
   "ownMeta": {},
-  "absolutePath": "C:/Users/Goku/Desktop/Cric/src/pages/_layout.svelte",
+  "absolutePath": "/home/zoomrx/Desktop/svelte/Cric/src/pages/_layout.svelte",
   "children": [
+    {
+      "isFile": true,
+      "isDir": false,
+      "file": "[matchId].svelte",
+      "filepath": "/[matchId].svelte",
+      "name": "[matchId]",
+      "ext": "svelte",
+      "badExt": false,
+      "absolutePath": "/home/zoomrx/Desktop/svelte/Cric/src/pages/[matchId].svelte",
+      "importPath": "../src/pages/[matchId].svelte",
+      "isLayout": false,
+      "isReset": false,
+      "isIndex": false,
+      "isFallback": false,
+      "isPage": true,
+      "ownMeta": {},
+      "meta": {
+        "recursive": true,
+        "preload": false,
+        "prerender": true
+      },
+      "path": "/:matchId",
+      "id": "__matchId",
+      "component": () => import('../src/pages/[matchId].svelte').then(m => m.default)
+    },
     {
       "isFile": true,
       "isDir": false,
@@ -32,7 +57,7 @@ export const _tree = {
       "name": "index",
       "ext": "svelte",
       "badExt": false,
-      "absolutePath": "C:/Users/Goku/Desktop/Cric/src/pages/index.svelte",
+      "absolutePath": "/home/zoomrx/Desktop/svelte/Cric/src/pages/index.svelte",
       "importPath": "../src/pages/index.svelte",
       "isLayout": false,
       "isReset": false,
@@ -52,37 +77,12 @@ export const _tree = {
     {
       "isFile": true,
       "isDir": false,
-      "file": "Match.svelte",
-      "filepath": "/Match.svelte",
-      "name": "Match",
-      "ext": "svelte",
-      "badExt": false,
-      "absolutePath": "C:/Users/Goku/Desktop/Cric/src/pages/Match.svelte",
-      "importPath": "../src/pages/Match.svelte",
-      "isLayout": false,
-      "isReset": false,
-      "isIndex": false,
-      "isFallback": false,
-      "isPage": true,
-      "ownMeta": {},
-      "meta": {
-        "recursive": true,
-        "preload": false,
-        "prerender": true
-      },
-      "path": "/Match",
-      "id": "_Match",
-      "component": () => import('../src/pages/Match.svelte').then(m => m.default)
-    },
-    {
-      "isFile": true,
-      "isDir": false,
       "file": "Team.svelte",
       "filepath": "/Team.svelte",
       "name": "Team",
       "ext": "svelte",
       "badExt": false,
-      "absolutePath": "C:/Users/Goku/Desktop/Cric/src/pages/Team.svelte",
+      "absolutePath": "/home/zoomrx/Desktop/svelte/Cric/src/pages/Team.svelte",
       "importPath": "../src/pages/Team.svelte",
       "isLayout": false,
       "isReset": false,

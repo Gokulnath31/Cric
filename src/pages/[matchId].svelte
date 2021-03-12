@@ -10,7 +10,7 @@
 
     import {goto, params } from '@roxi/routify'
 
-    let matchId=$params.matchId;;
+    export let matchId;// let matchId=$params.matchId;;
     
     let showScorecard = false;
     
